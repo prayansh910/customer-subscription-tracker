@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block title %}Parent Accounts{% endblock %}{% block heading %}Parent Accounts{% endblock %}
+{% block content %}<div class="panel"><div class="panel-head"><h2>Parent Accounts</h2><div><a class="btn primary" href="{{url_for('add_parent')}}">+ Parent Account</a><a class="btn" href="{{url_for('export_csv',kind='parents')}}">Export CSV</a></div></div>
+<table><thead><tr><th>Parent Email</th><th>Capacity</th><th>Subscription Periods</th><th>Active Periods</th><th>Status</th><th></th></tr></thead><tbody>
+{% for p in parents %}<tr><td><a href="{{url_for('parent_detail',parent_id=p.id)}}">{{p.email}}</a></td><td>{{p.capacity}}</td><td>{{p.periods}}</td><td>{{p.active_periods}}</td><td>{{p.status}}</td><td><a class="btn small" href="{{url_for('parent_detail',parent_id=p.id)}}">Details</a></td></tr>{% else %}<tr><td colspan="6" class="empty">No parent accounts.</td></tr>{% endfor %}</tbody></table></div>{% endblock %}

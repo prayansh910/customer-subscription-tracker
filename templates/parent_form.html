@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Add Parent{% endblock %}{% block heading %}Add Parent Account{% endblock %}
+{% block content %}<form class="panel form" method="post">{{csrf_input()|safe}}<div class="grid2">
+<label>Parent Email *<input required type="email" name="email"></label>
+<label>Default Capacity *<input required type="number" min="1" name="capacity" value="5"></label>
+<label>Status<select name="status">{% for s in STATUSES %}<option {% if s=='Active' %}selected{% endif %}>{{s}}</option>{% endfor %}</select></label>
+</div><label>Notes<textarea name="notes"></textarea></label><div class="form-actions"><button class="btn primary">Save Parent</button><a class="btn" href="{{url_for('parents')}}">Cancel</a></div></form>{% endblock %}

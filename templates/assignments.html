@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Monthly Assignments{% endblock %}{% block heading %}Monthly Assignments{% endblock %}
+{% block content %}
+<form class="searchbar" method="get">{{csrf_input()|safe}}<input type="month" name="month" value="{{selected_month}}"><input name="q" value="{{q}}" placeholder="Search customer / parent"><button class="btn primary">View</button><a class="btn" href="{{url_for('export_csv',kind='month',month=selected_month)}}">Export Month CSV</a></form>
+<div class="panel"><table><thead><tr><th>Customer</th><th>Parent</th><th>Added</th><th>Removed</th><th>Family Start</th><th>Family Expiry</th><th>Status</th></tr></thead><tbody>
+{% for r in rows %}<tr><td><a href="{{url_for('customer_detail',customer_id=r.customer_id)}}">#{{r.customer_id}} {{r.customer_name}}</a><br><span class="muted">{{r.customer_email}}</span></td><td>{{r.parent_email}}</td><td>{{r.customer_added_date}}</td><td>{{r.customer_removed_date or '—'}}</td><td>{{r.family_subscription_start_date}}</td><td><strong>{{r.family_subscription_expiry_date}}</strong></td><td>{{r.status}}</td></tr>{% else %}<tr><td colspan="7" class="empty">No assignments for this month.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

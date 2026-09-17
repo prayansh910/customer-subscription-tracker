@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Customer #{{customer.id}}{% endblock %}{% block heading %}Customer #{{customer.id}} — {{customer.name}}{% endblock %}
+{% block content %}
+<div class="top-actions inline"><a class="btn primary" href="{{url_for('assign_customer',customer_id=customer.id)}}">Assign / Change Parent</a><a class="btn" href="{{url_for('edit_customer',customer_id=customer.id)}}">Edit</a></div>
+<div class="detail-grid">
+<div class="panel"><h2>Customer Details</h2><dl>
+<dt>Name</dt><dd>{{customer.name}}</dd><dt>Customer ID</dt><dd>#{{customer.id}}</dd><dt>Phone</dt><dd>{{customer.phone or '—'}}</dd><dt>Email</dt><dd>{{customer.email}}</dd>
+<dt>Amount Paid</dt><dd>₹{{'%.2f'|format(customer.amount_paid or 0)}}</dd><dt>Payment Date</dt><dd>{{customer.payment_date or '—'}}</dd>
+<dt>Subscription</dt><dd>{{customer.subscription_start or '—'}} → {{customer.subscription_end or '—'}}</dd><dt>Plan</dt><dd>{{customer.plan_duration or '—'}}</dd><dt>Status</dt><dd>{{customer.status}}</dd><dt>Notes</dt><dd>{{customer.notes or '—'}}</dd>
+</dl></div>
+<div class="panel"><h2>Current Assignment</h2>{% if current %}
+<dl><dt>Parent</dt><dd>{{current.parent_email}}</dd><dt>Added</dt><dd>{{current.customer_added_date}}</dd><dt>Family Starts</dt><dd>{{current.family_subscription_start_date}}</dd><dt>Family Expires</dt><dd><strong>{{current.family_subscription_expiry_date}}</strong></dd><dt>Status</dt><dd>{{current.status}}</dd><dt>Notes</dt><dd>{{current.notes or '—'}}</dd></dl>
+{% else %}<div class="empty">No current active parent assignment.</div>{% endif %}</div>
+</div>
+<div class="panel"><div class="panel-head"><h2>Assignment History</h2><span class="muted">Historical records are never overwritten.</span></div>
+<table><thead><tr><th>Month</th><th>Parent</th><th>Added</th><th>Removed</th><th>Family Start</th><th>Family Expiry</th><th>Status</th></tr></thead>
+<tbody>{% for h in history %}<tr><td>{{h.month}}</td><td>{{h.parent_email}}</td><td>{{h.customer_added_date}}</td><td>{{h.customer_removed_date or '—'}}</td><td>{{h.family_subscription_start_date}}</td><td>{{h.family_subscription_expiry_date}}</td><td><span class="badge {{'ok' if h.status=='Active' else 'muted-badge'}}">{{h.status}}</span></td></tr>{% else %}<tr><td colspan="7" class="empty">No assignment history.</td></tr>{% endfor %}</tbody></table></div>
+<div class="panel"><h2>Customer Subscription Records</h2><table><thead><tr><th>Start</th><th>End</th><th>Plan</th><th>Amount</th><th>Status</th></tr></thead><tbody>{% for s in subscriptions %}<tr><td>{{s.start_date}}</td><td>{{s.end_date}}</td><td>{{s.plan_duration or '—'}}</td><td>₹{{'%.2f'|format(s.amount_paid or 0)}}</td><td>{{s.status}}</td></tr>{% else %}<tr><td colspan="5" class="empty">No subscription records.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}Assign Customer{% endblock %}{% block heading %}Assign Customer{% endblock %}
+{% block content %}
+<div class="notice"><strong>Important:</strong> Customer Added Date is independent. Family Start/Expiry always come from the selected Parent Subscription Period. The app never calculates family expiry from the added date.</div>
+<form class="panel form" method="post">{{csrf_input()|safe}}
+<label>Customer *<select required name="customer_id" id="customer"><option value="">Select customer</option>{% for c in customers %}<option value="{{c.id}}" {% if selected_customer|string==c.id|string %}selected{% endif %}>#{{c.id}} — {{c.name}} — {{c.email}}</option>{% endfor %}</select></label>
+<div class="grid2"><label>Month *<input required type="month" name="month" value="{{current_month}}"></label><label>Customer Added Date *<input required type="date" name="customer_added_date" value="{{today}}"></label></div>
+<label>Parent Subscription *<select required name="parent_subscription_id" id="parentSubscription"><option value="">Select an available parent subscription</option>{% for p in parent_options %}<option value="{{p.subscription_id}}" data-start="{{p.start_date}}" data-expiry="{{p.expiry_date}}" data-cap="{{p.capacity}}" data-members="{{p.members}}">{{p.email}} — {{p.start_date}} → {{p.expiry_date}} — {{p.members}}/{{p.capacity}} members</option>{% endfor %}</select></label>
+<div class="preview" id="familyPreview">Select a parent subscription to see the actual family expiry.</div>
+<label>Notes<textarea name="notes"></textarea></label>
+<div class="form-actions"><button class="btn primary">Assign Customer</button><a class="btn" href="{{url_for('customers')}}">Cancel</a></div>
+</form>{% endblock %}

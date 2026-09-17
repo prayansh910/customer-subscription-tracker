@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign in — SubTrack</title><link rel="stylesheet" href="{{url_for('static',filename='style.css')}}"></head>
+<body style="display:grid;place-items:center;min-height:100vh;padding:20px">
+<div class="panel" style="width:min(420px,100%)">
+<div class="brand" style="color:#172033;padding:0 0 18px">SubTrack <span>PRIVATE</span></div>
+<h1 style="margin:0 0 6px">Sign in</h1><p class="muted">Private customer subscription tracker.</p>
+{% with messages=get_flashed_messages(with_categories=true) %}{% for category,msg in messages %}<div class="flash {{category}}">{{msg}}</div>{% endfor %}{% endwith %}
+<form method="post">
+<label>Email<input required type="email" name="email" autocomplete="username"></label>
+<label>Password<input required type="password" name="password" autocomplete="current-password"></label>
+<button class="btn primary" style="width:100%">Sign in</button>
+</form>
+</div></body></html>

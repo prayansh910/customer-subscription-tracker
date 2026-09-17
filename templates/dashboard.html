@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Dashboard{% endblock %}{% block heading %}Dashboard{% endblock %}
+{% block content %}
+<div class="cards">
+{% for label,value,cls in [('Total Customers',total,'blue'),('Active',active,'green'),('Expired',expired,'red'),('Expiring in 7 Days',expiring,'amber'),('Pending Assignments',pending,'purple'),('Parent Accounts',parents,'slate'),('Available Slots',slots,'teal')] %}
+<div class="stat {{cls}}"><div>{{label}}</div><strong>{{value}}</strong></div>{% endfor %}
+</div>
+<div class="panel">
+<div class="panel-head"><h2>Recent Customers</h2><a href="{{url_for('customers')}}">View all</a></div>
+<table><thead><tr><th>ID</th><th>Customer</th><th>Email</th><th>Customer Expiry</th><th>Current Parent</th><th>Family Expiry</th></tr></thead>
+<tbody>{% for r in recent %}<tr><td><a href="{{url_for('customer_detail',customer_id=r.id)}}">#{{r.id}}</a></td><td>{{r.name}}</td><td>{{r.email}}</td><td>{{r.subscription_end or '—'}}</td><td>{{r.parent_email or 'Unassigned'}}</td><td>{{r.family_expiry or '—'}}</td></tr>{% else %}<tr><td colspan="6" class="empty">No customers yet.</td></tr>{% endfor %}</tbody></table>
+</div>
+<div class="quick-grid">
+<a class="quick" href="{{url_for('add_customer')}}">Add a customer →</a>
+<a class="quick" href="{{url_for('add_parent')}}">Add a parent account →</a>
+<a class="quick" href="{{url_for('assign_customer')}}">Assign a customer →</a>
+<a class="quick" href="{{url_for('backup_settings')}}">Create a backup →</a>
+</div>
+{% endblock %}

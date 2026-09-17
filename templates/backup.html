@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% block title %}Backup & Settings{% endblock %}{% block heading %}Backup & Settings{% endblock %}
+{% block content %}
+<div class="detail-grid">
+<div class="panel"><h2>Cloud Database</h2>
+<p>Your live data is stored in PostgreSQL when deployed on Render. The web service itself does not rely on a local SQLite file.</p>
+<dl><dt>Mode</dt><dd>{{'PostgreSQL (cloud)' if config.DATABASE_URL else 'SQLite (local)'}}</dd>
+<dt>Backup format</dt><dd>SubTrack JSON</dd></dl>
+<a class="btn primary" href="{{url_for('backup_download')}}">Download Full Backup</a>
+</div>
+<div class="panel"><h2>Restore</h2>
+<p>Upload a previously downloaded SubTrack JSON backup. Restore is an explicit action and replaces the current application tables.</p>
+<form method="post" action="{{url_for('backup_restore')}}" enctype="multipart/form-data" onsubmit="return confirm('Restore this backup? Current data will be replaced. Make sure you have a fresh backup first.')">
+<label>Backup file<input required type="file" name="backup_file" accept=".json,application/json"></label>
+<button class="btn">Restore Backup</button>
+</form>
+</div>
+</div>
+<div class="panel"><h2>Database safety</h2>
+<ul class="clean">
+<li>Login is required for all application pages.</li>
+<li>Passwords are stored as hashes, not plaintext.</li>
+<li>Sessions use HttpOnly/SameSite cookies; production cookies require HTTPS.</li>
+<li>CSRF protection is enabled for state-changing forms.</li>
+<li>Assignment history is never overwritten when a customer changes parent.</li>
+<li>For Render PostgreSQL, use Render's managed recovery/backups in addition to downloading application backups.</li>
+</ul></div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}{{parent.email}}{% endblock %}{% block heading %}Parent — {{parent.email}}{% endblock %}
+{% block content %}
+<div class="detail-grid"><div class="panel"><h2>Account</h2><dl><dt>Email</dt><dd>{{parent.email}}</dd><dt>Default Capacity</dt><dd>{{parent.capacity}}</dd><dt>Status</dt><dd>{{parent.status}}</dd><dt>Notes</dt><dd>{{parent.notes or '—'}}</dd></dl></div>
+<div class="panel"><h2>Current Members</h2><strong class="big">{{members|length}}</strong> <span class="muted">active members across current periods</span></div></div>
+<div class="panel"><div class="panel-head"><h2>Subscription Periods</h2><span class="muted">Expiry is entered independently from customer-added dates.</span></div>
+<form method="post" action="{{url_for('add_parent_subscription',parent_id=parent.id)}}" class="inline-form">{{csrf_input()|safe}}
+<label>Start<input required type="date" name="start_date"></label><label>Expiry<input required type="date" name="expiry_date"></label><label>Capacity override<input type="number" min="1" name="capacity" placeholder="{{parent.capacity}}"></label><label>Status<select name="status"><option>Active</option><option>Expired</option><option>Inactive</option></select></label><button class="btn primary">+ Add Period</button>
+</form>
+<table><thead><tr><th>Start</th><th>Expiry</th><th>Capacity</th><th>Members</th><th>Available</th><th>Status</th></tr></thead><tbody>
+{% for ps in periods %}<tr><td>{{ps.start_date}}</td><td><strong>{{ps.expiry_date}}</strong></td><td>{{ps.capacity or parent.capacity}}</td><td>{{ps.members}}</td><td>{{(ps.capacity or parent.capacity)-ps.members if (ps.capacity or parent.capacity)-ps.members > 0 else 0}}</td><td>{{ps.status}}</td></tr>{% else %}<tr><td colspan="6" class="empty">No subscription periods yet.</td></tr>{% endfor %}</tbody></table></div>
+<div class="panel"><h2>Current Members</h2><table><thead><tr><th>Customer</th><th>Added</th><th>Family Expiry</th><th>Month</th></tr></thead><tbody>{% for m in members %}<tr><td><a href="{{url_for('customer_detail',customer_id=m.id)}}">{{m.name}}</a></td><td>{{m.customer_added_date}}</td><td>{{m.family_subscription_expiry_date}}</td><td>{{m.month}}</td></tr>{% else %}<tr><td colspan="4" class="empty">No current members.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

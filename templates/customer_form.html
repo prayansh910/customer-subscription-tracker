@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}{{'Edit' if customer else 'Add'}} Customer{% endblock %}{% block heading %}{{'Edit' if customer else 'Add'}} Customer{% endblock %}
+{% block content %}<form class="panel form" method="post">{{csrf_input()|safe}}
+<div class="grid2">
+<label>Name *<input required name="name" value="{{customer.name if customer else ''}}"></label>
+<label>Phone<input name="phone" value="{{customer.phone if customer else ''}}"></label>
+<label>Email *<input required type="email" name="email" value="{{customer.email if customer else ''}}"></label>
+<label>Amount Paid<input type="number" step="0.01" min="0" name="amount_paid" value="{{customer.amount_paid if customer else 0}}"></label>
+<label>Payment Date<input type="date" name="payment_date" value="{{customer.payment_date if customer else ''}}"></label>
+<label>Plan Duration<input name="plan_duration" placeholder="e.g. 1 Month" value="{{customer.plan_duration if customer else ''}}"></label>
+<label>Subscription Start<input type="date" name="subscription_start" value="{{customer.subscription_start if customer else ''}}"></label>
+<label>Subscription End<input type="date" name="subscription_end" value="{{customer.subscription_end if customer else ''}}"></label>
+<label>Status<select name="status">{% for s in STATUSES %}<option {% if customer and customer.status==s %}selected{% endif %}>{{s}}</option>{% endfor %}</select></label>
+</div>
+<label>Notes<textarea name="notes">{{customer.notes if customer else ''}}</textarea></label>
+<div class="form-actions"><button class="btn primary">Save Customer</button><a class="btn" href="{{url_for('customers')}}">Cancel</a></div>
+</form>{% endblock %}

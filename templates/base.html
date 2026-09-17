@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Subscription Tracker{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script defer src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand">SubTrack <span>PRIVATE</span></div>
+  <nav>
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('customers') }}">Customers</a>
+    <a href="{{ url_for('assignments') }}">Monthly Assignments</a>
+    <a href="{{ url_for('parents') }}">Parent Accounts</a>
+    <a href="{{ url_for('history') }}">Assignment History</a>
+    <a href="{{ url_for('backup_settings') }}">Backup & Settings</a>
+  </nav>
+  <div class="side-note">Local-only • SQLite<br>Data stays on this PC.</div>
+</aside>
+<main class="main">
+<header class="topbar">
+  <div><h1>{% block heading %}{% endblock %}</h1><div class="muted">{{ current_month }}</div></div>
+  <div class="top-actions">
+<a class="btn primary" href="{{ url_for('add_customer') }}">+ Customer</a>
+<a class="btn" href="{{ url_for('assign_customer') }}">Assign</a>
+{% if logged_in %}<form method="post" action="{{url_for('logout')}}" style="display:inline">{{csrf_input()|safe}}<button class="btn" type="submit">Logout</button></form>{% endif %}
+</div>
+</header>
+{% with messages=get_flashed_messages(with_categories=true) %}
+{% if messages %}<div class="flashes">{% for category,msg in messages %}<div class="flash {{category}}">{{msg}}</div>{% endfor %}</div>{% endif %}
+{% endwith %}
+{% block content %}{% endblock %}
+</main>
+</div>
+</body>
+</html>
