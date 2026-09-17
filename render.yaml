@@ -2,6 +2,7 @@ services:
   - type: web
     name: subtrack
     runtime: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
@@ -18,5 +19,6 @@ services:
 
 databases:
   - name: subtrack-db
+    plan: free
     databaseName: subtrack
     user: subtrack
