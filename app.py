@@ -59,7 +59,7 @@ def ensure_admin():
     exists = exec_sql(conn, "SELECT id FROM users WHERE email=?", (email,)).fetchone()
     if not exists:
         exec_sql(conn, "INSERT INTO users(email,password_hash,is_active) VALUES(?,?,?)",
-                 (email, generate_password_hash(password)))
+                 (email, generate_password_hash(password), True))
         conn.commit()
     conn.close()
 
